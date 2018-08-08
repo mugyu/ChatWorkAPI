@@ -3,6 +3,7 @@ namespace ChatWorkAPI;
 require_once __DIR__.'/Connection.php';
 require_once __DIR__.'/Messages.php';
 require_once __DIR__.'/Members.php';
+require_once __DIR__.'/Tasks.php';
 require_once __DIR__.'/RoomTasks.php';
 require_once __DIR__.'/Files.php';
 
@@ -62,8 +63,7 @@ class Room
 	{
 		if (is_null($this->_tasks))
 		{
-			$roomTaskFetcher = new RoomTasks($this->room_id, $options);
-			$this->_tasks = new Tasks($roomTaskFetcher);
+			$this->_tasks = new Tasks(new RoomTasks($this->room_id, $options));
 		}
 		return $this->_tasks;
 	}

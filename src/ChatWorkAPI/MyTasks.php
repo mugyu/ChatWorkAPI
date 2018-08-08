@@ -1,10 +1,8 @@
 <?php
 namespace ChatWorkAPI;
 require_once __DIR__.'/Connection.php';
-require_once __DIR__.'/Tasks.php';
-require_once __DIR__.'/Task.php';
 
-class MyTasks extends Tasks
+class MyTasks
 {
 	protected $params = [];
 	protected $connection;
