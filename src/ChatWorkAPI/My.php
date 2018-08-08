@@ -1,6 +1,7 @@
 <?php
 namespace ChatWorkAPI;
 require_once __DIR__.'/Connection.php';
+require_once __DIR__.'/Status.php';
 require_once __DIR__.'/MyTasks.php';
 require_once __DIR__.'/Me.php';
 
@@ -15,11 +16,7 @@ class My
 
 	public function status()
 	{
-		$response = $this->connection->execute(
-			'GET',
-			'https://api.chatwork.com/v2/my/status'
-		);
-		return json_decode($response['body']);
+		return new Status();
 	}
 
 	public function tasks($options = [])
