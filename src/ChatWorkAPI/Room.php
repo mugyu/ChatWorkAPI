@@ -91,8 +91,7 @@ class Room
 	{
 		if (in_array($name, self::$_properties))
 		{
-			$room = self::_fetch($this->room_id);
-			$this->_inject($room);
+			$this->_inject(self::_fetch($this->room_id));
 		}
 		return $this->$name;
 	}
@@ -115,7 +114,8 @@ class Room
 		}
 	}
 
-	public static function fetch($room_id) {
+	public static function fetch($room_id)
+	{
 		$room = self::_fetch($room_id);
 		return self::inject($room);
 	}
