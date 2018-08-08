@@ -42,8 +42,7 @@ class Status
 
 	public static function fetch()
 	{
-		$me = self::_fetch();
-		return self::inject($room);
+		return self::inject(self::_fetch());
 	}
 
 	protected static function _fetch()

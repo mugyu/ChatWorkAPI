@@ -22,9 +22,9 @@ class File
 		$this->upload_time = $file->upload_time;
 	}
 
-	public static function fetch($room_id, $file_id) {
-		$file = self::_fetch($room_id, $file_id);
-		return new self($file);
+	public static function fetch($room_id, $file_id)
+	{
+		return new self(self::_fetch($room_id, $file_id));
 	}
 
 	protected static function _fetch($room_id, $file_id)

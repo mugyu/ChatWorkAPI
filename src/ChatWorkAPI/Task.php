@@ -24,9 +24,9 @@ class Task
 		$this->status              = $task->status;
 	}
 
-	public static function fetch($room_id, $task_id) {
-		$task = self::_fetch($room_id, $task_id);
-		return new self($task);
+	public static function fetch($room_id, $task_id)
+	{
+		return new self(self::_fetch($room_id, $task_id));
 	}
 
 	protected static function _fetch($room_id, $task_id)

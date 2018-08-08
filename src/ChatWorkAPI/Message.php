@@ -20,9 +20,9 @@ class Message
 		$this->update_time = $message->update_time;
 	}
 
-	public static function fetch($room_id, $message_id) {
-		$message = self::_fetch($room_id, $message_id);
-		return new self($message);
+	public static function fetch($room_id, $message_id)
+	{
+		return new self(self::_fetch($room_id, $message_id));
 	}
 
 	protected static function _fetch($room_id, $message_id)

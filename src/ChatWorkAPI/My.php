@@ -21,8 +21,7 @@ class My
 
 	public function tasks($options = [])
 	{
-		$myTaskFetcher = new MyTasks($options);
-		return new Tasks($myTaskFetcher);
+		return new Tasks(new MyTasks($options));
 	}
 
 	public function room()

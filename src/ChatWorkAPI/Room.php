@@ -116,8 +116,7 @@ class Room
 
 	public static function fetch($room_id)
 	{
-		$room = self::_fetch($room_id);
-		return self::inject($room);
+		return self::inject(self::_fetch($room_id));
 	}
 
 	protected static function _fetch($room_id)
