@@ -2,6 +2,7 @@
 namespace ChatWorkAPI;
 require_once __DIR__.'/Connection.php';
 require_once __DIR__.'/MyTasks.php';
+require_once __DIR__.'/Me.php';
 
 class My
 {
@@ -25,5 +26,10 @@ class My
 	{
 		$myTaskFetcher = new MyTasks($options);
 		return new Tasks($myTaskFetcher);
+	}
+
+	public function room()
+	{
+		return (new Me())->room();
 	}
 }
