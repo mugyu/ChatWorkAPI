@@ -9,7 +9,7 @@ class Messages implements \Iterator
 	protected $force;
 	protected $messages = NULL;
 	protected $connection;
-	protected $key;
+	protected $index;
 	protected $size;
 
 	function __construct($room_id, $force = FALSE)
@@ -21,17 +21,17 @@ class Messages implements \Iterator
 
 	public function current()
 	{
-		return new Message($this->messages[$this->key]);
+		return $this->messages[$this->index];
 	}
 
 	public function key()
 	{
-		return $this->key;
+		return $this->messages[$this->index]->message_id;
 	}
 
 	public function next()
 	{
-		++$this->key;
+		++$this->index;
 	}
 
 	public function rewind()
@@ -40,12 +40,12 @@ class Messages implements \Iterator
 		{
 			$this->fetch();
 		}
-		$this->key = 0;
+		$this->index = 0;
 	}
 
 	public function valid()
 	{
-		return $this->key < $this->size;
+		return $this->index < $this->size;
 	}
 
 	protected function fetch()
@@ -55,7 +55,11 @@ class Messages implements \Iterator
 			'https://api.chatwork.com/v2/rooms/'.$this->room_id.'/messages?force='.($this->force ? '1' : '0')
 		);
 		$messages = json_decode($response['body']);
-		$this->messages = $messages ?: [];
+		$this->messages = [];
+		foreach($messages ?: [] as $message)
+		{
+			$this->messages[] = new Message($message);
+		}
 		$this->size = count($this->messages);
 	}
 }

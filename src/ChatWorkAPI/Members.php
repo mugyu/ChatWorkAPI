@@ -8,7 +8,7 @@ class Members implements \Iterator
 	protected $room_id;
 	protected $members = NULL;
 	protected $connection;
-	protected $key;
+	protected $index;
 	protected $size;
 	function __construct($room_id)
 	{
@@ -18,17 +18,17 @@ class Members implements \Iterator
 
 	public function current()
 	{
-		return new Member($this->members[$this->key]);
+		return $this->members[$this->index];
 	}
 
 	public function key()
 	{
-		return $this->key;
+		return $this->members[$this->index]->account_id;
 	}
 
 	public function next()
 	{
-		++$this->key;
+		++$this->index;
 	}
 
 	public function rewind()
@@ -37,12 +37,12 @@ class Members implements \Iterator
 		{
 			$this->fetch();
 		}
-		$this->key = 0;
+		$this->index = 0;
 	}
 
 	public function valid()
 	{
-		return $this->key < $this->size;
+		return $this->index < $this->size;
 	}
 
 	protected function fetch()
@@ -52,7 +52,11 @@ class Members implements \Iterator
 			'https://api.chatwork.com/v2/rooms/'.$this->room_id.'/members'
 		);
 		$members = json_decode($response['body']);
-		$this->members = $members ?: [];
+		$this->members = [];
+		foreach($members ?: [] as $member)
+		{
+			$this->members[] = new Member($member);
+		}
 		$this->size = count($this->members);
 	}
 }

@@ -9,7 +9,7 @@ class Files implements \Iterator
 	protected $account_id;
 	protected $files = NULL;
 	protected $connection;
-	protected $key;
+	protected $index;
 	protected $size;
 	function __construct($room_id, $account_id = NULL)
 	{
@@ -20,17 +20,17 @@ class Files implements \Iterator
 
 	public function current()
 	{
-		return new File($this->files[$this->key]);
+		return $this->files[$this->index];
 	}
 
 	public function key()
 	{
-		return $this->key;
+		return $this->files[$this->index]->file_id;
 	}
 
 	public function next()
 	{
-		++$this->key;
+		++$this->index;
 	}
 
 	public function rewind()
@@ -39,12 +39,12 @@ class Files implements \Iterator
 		{
 			$this->fetch();
 		}
-		$this->key = 0;
+		$this->index = 0;
 	}
 
 	public function valid()
 	{
-		return $this->key < $this->size;
+		return $this->index < $this->size;
 	}
 
 	protected function fetch()
@@ -59,7 +59,11 @@ class Files implements \Iterator
 			'https://api.chatwork.com/v2/rooms/'.$this->room_id.'/files'.$find_by_account_id
 		);
 		$files = json_decode($response['body']);
-		$this->files = $files ?: [];
+		$this->files = [];
+		foreach($files ?: [] as $file)
+		{
+			$this->files[] = new File($file);
+		}
 		$this->size = count($this->files);
 	}
 }

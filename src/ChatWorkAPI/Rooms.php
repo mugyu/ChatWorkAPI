@@ -7,7 +7,7 @@ class Rooms implements \Iterator
 {
 	protected $rooms = NULL;
 	protected $connection;
-	protected $key;
+	protected $index;
 	protected $size;
 	function __construct()
 	{
@@ -16,17 +16,17 @@ class Rooms implements \Iterator
 
 	public function current()
 	{
-		return Room::inject($this->rooms[$this->key]);
+		return $this->rooms[$this->index];
 	}
 
 	public function key()
 	{
-		return $this->key;
+		return $this->rooms[$this->index]->room_id;
 	}
 
 	public function next()
 	{
-		++$this->key;
+		++$this->index;
 	}
 
 	public function rewind()
@@ -35,12 +35,12 @@ class Rooms implements \Iterator
 		{
 			$this->fetch();
 		}
-		$this->key = 0;
+		$this->index = 0;
 	}
 
 	public function valid()
 	{
-		return $this->key < $this->size;
+		return $this->index < $this->size;
 	}
 
 	protected function fetch()
@@ -50,7 +50,11 @@ class Rooms implements \Iterator
 			'https://api.chatwork.com/v2/rooms'
 		);
 		$rooms = json_decode($response['body']);
-		$this->rooms = $rooms ?: [];
+		$this->rooms = [];
+		foreach($rooms ?: [] as $room)
+		{
+			$this->rooms[] = Room::inject($room);
+		}
 		$this->size = count($this->rooms);
 	}
 }

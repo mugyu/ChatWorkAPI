@@ -7,7 +7,7 @@ class Tasks implements \Iterator
 	protected $fetcher;
 	protected $tasks = NULL;
 	protected $connection;
-	protected $key;
+	protected $index;
 	protected $size;
 
 	public function __construct($fetcher)
@@ -17,17 +17,17 @@ class Tasks implements \Iterator
 
 	public function current()
 	{
-		return $this->tasks[$this->key];
+		return $this->tasks[$this->index];
 	}
 
 	public function key()
 	{
-		return $this->key;
+		return $this->tasks[$this->index]->task_id;
 	}
 
 	public function next()
 	{
-		++$this->key;
+		++$this->index;
 	}
 
 	public function rewind()
@@ -41,11 +41,11 @@ class Tasks implements \Iterator
 			}
 			$this->size = count($this->tasks);
 		}
-		$this->key = 0;
+		$this->index = 0;
 	}
 
 	public function valid()
 	{
-		return $this->key < $this->size;
+		return $this->index < $this->size;
 	}
 }
