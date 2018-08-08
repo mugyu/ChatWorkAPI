@@ -7,6 +7,10 @@ class Connection
 	protected $timeout = 30;
 	protected $max_redirects = 10;
 	protected $curl_options;
+	protected $excepted_methods = [
+		'GET',
+		'POST'
+	];
 
 	public static function set_token($chatWorkToken)
 	{
@@ -34,11 +38,17 @@ class Connection
 		];
 	}
 
-	public function execute($method, $url)
+	public function execute($method, $url, $body = '')
 	{
+		$this->validate_method($method);
 		$options = $this->curl_options;
 		$options[CURLOPT_CUSTOMREQUEST] = $method;
 		$options[CURLOPT_URL] = $url;
+		if ($method === 'POST')
+		{
+			$options[CURLOPT_POSTFIELDS] = http_build_query(['body' => $body]);
+			$options[CURLOPT_HTTPHEADER][] = "Content-Type: application/x-www-form-urlencoded";
+		}
 
 		$curl = curl_init();
 		curl_setopt_array($curl, $options);
@@ -47,5 +57,14 @@ class Connection
 		$info['errorMessage'] = curl_error($curl);
 		curl_close($curl);
 		return $info;
+	}
+
+	protected function validate_method($method)
+	{
+		if ( ! in_array($method, $this->excepted_methods))
+		{
+			throw new UnexpectedValueException('The method name is not expected HTTP Methods.');
+		}
+		return TRUE;
 	}
 }
