@@ -12,11 +12,8 @@ class ChatWorkAPI
 
 	public function me()
 	{
-		$response = $this->connection->execute(
-			'GET',
-			'https://api.chatwork.com/v2/me'
-		);
-		return json_decode($response['body']);
+		require_once __DIR__.'/ChatWorkAPI/Me.php';
+		return new \ChatWorkAPI\Me();
 	}
 
 	public function my()
@@ -27,11 +24,8 @@ class ChatWorkAPI
 
 	public function contacts()
 	{
-		$response = $this->connection->execute(
-			'GET',
-			'https://api.chatwork.com/v2/contacts'
-		);
-		return json_decode($response['body']);
+		require_once __DIR__.'/ChatWorkAPI/Contacts.php';
+		return new \ChatWorkAPI\Contacts();
 	}
 
 	public function rooms()

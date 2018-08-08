@@ -6,6 +6,14 @@
 $chatWorkApi = new ChatWorkAPI(CHATWORK_TOKEN);
 
 $chatWorkApi->me();
+$chatWorkApi->me()->room();
+$chatWorkApi->me()->room()->file($file_id);
+$chatWorkApi->me()->room()->files();
+$chatWorkApi->me()->room()->menbers();
+$chatWorkApi->me()->room()->message($message_id);
+$chatWorkApi->me()->room()->messages();
+$chatWorkApi->me()->room()->task($task_id);
+$chatWorkApi->me()->room()->tasks();
 $chatWorkApi->my()->status();
 $chatWorkApi->my()->tasks();
 $chatWorkApi->contacts();
