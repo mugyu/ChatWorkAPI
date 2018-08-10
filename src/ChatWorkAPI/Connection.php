@@ -38,7 +38,7 @@ class Connection
 		];
 	}
 
-	public function execute($method, $url, $body = '')
+	public function execute($method, $url, $postfields = [])
 	{
 		$this->validate_method($method);
 		$options = $this->curl_options;
@@ -46,7 +46,7 @@ class Connection
 		$options[CURLOPT_URL] = $url;
 		if ($method === 'POST')
 		{
-			$options[CURLOPT_POSTFIELDS] = http_build_query(['body' => $body]);
+			$options[CURLOPT_POSTFIELDS] = http_build_query($postfields);
 			$options[CURLOPT_HTTPHEADER][] = "Content-Type: application/x-www-form-urlencoded";
 		}
 

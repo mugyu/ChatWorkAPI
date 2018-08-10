@@ -19,13 +19,17 @@ class Messages implements \Iterator
 		$this->connection = new Connection();
 	}
 
-	public function post($content)
+	public function post($content, $self_unread = FALSE)
 	{
+		$postfields = [
+			'body' => $content,
+			'self_unread' => $self_unread ? '1' : '0'
+		];
 		$connection = new Connection();
 		$response = $connection->execute(
 			'POST',
 			'https://api.chatwork.com/v2/rooms/'.$this->room_id.'/messages',
-			$content
+			$postfields
 		);
 		return json_decode($response['body'])->message_id;
 	}
