@@ -7,7 +7,12 @@ class Contacts implements \IteratorAggregate
 {
 	public function getIterator()
 	{
-		return new \ArrayIterator($this->fetch());
+		static $iterator = NULL;
+		if ( ! $iterator)
+		{
+			$iterator =  new \ArrayIterator($this->fetch());
+		}
+		return $iterator;
 	}
 
 	protected function fetch()
