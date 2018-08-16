@@ -3,58 +3,25 @@ namespace ChatWorkAPI;
 require_once __DIR__.'/Connection.php';
 require_once __DIR__.'/Contact.php';
 
-class Contacts implements \Iterator
+class Contacts implements \IteratorAggregate
 {
-	protected $contacts = NULL;
-	protected $connection;
-	protected $index;
-	protected $size;
-	function __construct()
+	public function getIterator()
 	{
-		$this->connection = new Connection();
-	}
-
-	public function current()
-	{
-		return $this->contacts[$this->index];
-	}
-
-	public function key()
-	{
-		return $this->contacts[$this->index]->account_id;
-	}
-
-	public function next()
-	{
-		++$this->index;
-	}
-
-	public function rewind()
-	{
-		if ($this->contacts === NULL)
-		{
-			$this->fetch();
-		}
-		$this->index = 0;
-	}
-
-	public function valid()
-	{
-		return $this->index < $this->size;
+		return new \ArrayIterator($this->fetch());
 	}
 
 	protected function fetch()
 	{
-		$response = $this->connection->execute(
+		$connection = new Connection();
+		$response = $connection->execute(
 			'GET',
 			'https://api.chatwork.com/v2/contacts'
 		);
-		$contacts = json_decode($response['body']);
-		$this->contacts = [];
-		foreach($contacts ?: [] as $contact)
+		$contacts = [];
+		foreach(json_decode($response['body']) ?: [] as $contact)
 		{
-			$this->contacts[] = new Contact($contact);
+			$contacts[$contact->account_id] = new Contact($contact);
 		}
-		$this->size = count($this->contacts);
+		return $contacts;
 	}
 }

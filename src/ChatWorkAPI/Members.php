@@ -3,60 +3,31 @@ namespace ChatWorkAPI;
 require_once __DIR__.'/Connection.php';
 require_once __DIR__.'/Member.php';
 
-class Members implements \Iterator
+class Members implements \IteratorAggregate
 {
 	protected $room_id;
-	protected $members = NULL;
-	protected $connection;
-	protected $index;
-	protected $size;
 	function __construct($room_id)
 	{
 		$this->room_id = $room_id;
-		$this->connection = new Connection();
 	}
 
-	public function current()
+	public function getIterator()
 	{
-		return $this->members[$this->index];
-	}
-
-	public function key()
-	{
-		return $this->members[$this->index]->account_id;
-	}
-
-	public function next()
-	{
-		++$this->index;
-	}
-
-	public function rewind()
-	{
-		if ($this->members === NULL)
-		{
-			$this->fetch();
-		}
-		$this->index = 0;
-	}
-
-	public function valid()
-	{
-		return $this->index < $this->size;
+		return new \ArrayIterator($this->fetch());
 	}
 
 	protected function fetch()
 	{
-		$response = $this->connection->execute(
+		$connection = new Connection();
+		$response = $connection->execute(
 			'GET',
 			'https://api.chatwork.com/v2/rooms/'.$this->room_id.'/members'
 		);
-		$members = json_decode($response['body']);
-		$this->members = [];
-		foreach($members ?: [] as $member)
+		$members = [];
+		foreach(json_decode($response['body']) ?: [] as $member)
 		{
-			$this->members[] = new Member($member);
+			$members[$member->account_id] = new Member($member);
 		}
-		$this->size = count($this->members);
+		return $members;
 	}
 }
