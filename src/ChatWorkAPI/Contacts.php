@@ -5,14 +5,15 @@ require_once __DIR__.'/Contact.php';
 
 class Contacts implements \IteratorAggregate
 {
+	protected $iterator = NULL;
+
 	public function getIterator()
 	{
-		static $iterator = NULL;
-		if ( ! $iterator)
+		if ($this->iterator === NULL)
 		{
-			$iterator =  new \ArrayIterator($this->fetch());
+			$this->iterator =  new \ArrayIterator($this->fetch());
 		}
-		return $iterator;
+		return $this->iterator;
 	}
 
 	protected function fetch()

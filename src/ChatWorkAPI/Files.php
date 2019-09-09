@@ -7,6 +7,8 @@ class Files implements \IteratorAggregate
 {
 	protected $room_id;
 	protected $account_id;
+	protected $iterator = NULL;
+
 	function __construct($room_id, $account_id = NULL)
 	{
 		$this->room_id = $room_id;
@@ -15,12 +17,11 @@ class Files implements \IteratorAggregate
 
 	public function getIterator()
 	{
-		static $iterator = NULL;
-		if ( ! $iterator)
+		if ($this->iterator === NULL)
 		{
-			$iterator =  new \ArrayIterator($this->fetch());
+			$this->iterator =  new \ArrayIterator($this->fetch());
 		}
-		return $iterator;
+		return $this->iterator;
 	}
 
 	protected function fetch()

@@ -7,6 +7,7 @@ class Messages implements \IteratorAggregate
 {
 	protected $room_id;
 	protected $force;
+	protected $iterator = NULL;
 
 	function __construct($room_id, $force = FALSE)
 	{
@@ -16,12 +17,11 @@ class Messages implements \IteratorAggregate
 
 	public function getIterator()
 	{
-		static $iterator = NULL;
-		if ( ! $iterator)
+		if ($this->iterator === NULL)
 		{
-			$iterator =  new \ArrayIterator($this->fetch());
+			$this->iterator =  new \ArrayIterator($this->fetch());
 		}
-		return $iterator;
+		return $this->iterator;
 	}
 
 	protected function fetch()

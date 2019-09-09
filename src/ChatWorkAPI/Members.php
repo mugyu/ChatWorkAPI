@@ -6,6 +6,8 @@ require_once __DIR__.'/Member.php';
 class Members implements \IteratorAggregate
 {
 	protected $room_id;
+	protected $iterator = NULL;
+
 	function __construct($room_id)
 	{
 		$this->room_id = $room_id;
@@ -13,12 +15,11 @@ class Members implements \IteratorAggregate
 
 	public function getIterator()
 	{
-		static $iterator = NULL;
-		if ( ! $iterator)
+		if ($this->iterator === NULL)
 		{
-			$iterator =  new \ArrayIterator($this->fetch());
+			$this->iterator =  new \ArrayIterator($this->fetch());
 		}
-		return $iterator;
+		return $this->iterator;
 	}
 
 	protected function fetch()

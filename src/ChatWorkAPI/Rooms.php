@@ -5,14 +5,15 @@ require_once __DIR__.'/Room.php';
 
 class Rooms implements \IteratorAggregate
 {
+	protected $iterator = NULL;
+
 	public function getIterator()
 	{
-		static $iterator = NULL;
-		if ( ! $iterator)
+		if ($this->iterator === NULL)
 		{
-			$iterator =  new \ArrayIterator($this->fetch());
+			$this->iterator =  new \ArrayIterator($this->fetch());
 		}
-		return $iterator;
+		return $this->iterator;
 	}
 
 	protected function fetch()
