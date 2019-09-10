@@ -1,21 +1,11 @@
 <?php
 namespace ChatWorkAPI;
 require_once __DIR__.'/Connection.php';
+require_once __DIR__.'/IteratorAggregate.php';
 require_once __DIR__.'/Contact.php';
 
-class Contacts implements \IteratorAggregate
+class Contacts extends IteratorAggregate
 {
-	protected $iterator = NULL;
-
-	public function getIterator()
-	{
-		if ($this->iterator === NULL)
-		{
-			$this->iterator =  new \ArrayIterator($this->fetch());
-		}
-		return $this->iterator;
-	}
-
 	protected function fetch()
 	{
 		$connection = new Connection();

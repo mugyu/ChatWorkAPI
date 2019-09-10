@@ -1,27 +1,18 @@
 <?php
 namespace ChatWorkAPI;
 require_once __DIR__.'/Connection.php';
+require_once __DIR__.'/IteratorAggregate.php';
 require_once __DIR__.'/File.php';
 
-class Files implements \IteratorAggregate
+class Files extends IteratorAggregate
 {
 	protected $room_id;
 	protected $account_id;
-	protected $iterator = NULL;
 
 	function __construct($room_id, $account_id = NULL)
 	{
 		$this->room_id = $room_id;
 		$this->account_id = $account_id;
-	}
-
-	public function getIterator()
-	{
-		if ($this->iterator === NULL)
-		{
-			$this->iterator =  new \ArrayIterator($this->fetch());
-		}
-		return $this->iterator;
 	}
 
 	protected function fetch()
