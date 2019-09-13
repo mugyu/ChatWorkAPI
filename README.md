@@ -28,6 +28,7 @@ $chatWorkApi->my()->room()->task($task_id);
 $chatWorkApi->my()->room()->tasks();
 $chatWorkApi->contacts();
 $chatWorkApi->rooms();
+$chatWorkApi->room($room_id);
 $chatWorkApi->room($room_id)->file($file_id);
 $chatWorkApi->room($room_id)->files();
 $chatWorkApi->room($room_id)->menbers();
